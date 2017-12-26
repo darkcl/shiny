@@ -12,7 +12,7 @@ Start Hunting for Xerneas
 
 Start Hunting for Poipole, Pikachu
 
-```shiny count "Xerneas Poipole" for 1```
+```shiny count "Xerneas Poipole" --add 1```
 
 Add Counter for Xerneas and Poipole for 1
 
