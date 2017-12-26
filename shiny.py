@@ -1,8 +1,53 @@
-import click
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import os
 import sqlite3
 
+import click
+from terminaltables import AsciiTable
+
 # Database related
+
+def list_info(names, path):
+    """List information in progress database
+
+    Args:
+        names (list of str): Names of the pokemons
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+
+    if len(names) == 0:
+        result = cur.execute("""
+            SELECT `PKM_NAME`, `ENCOUNTER`, `DONE` FROM counter;
+        """)
+    else:
+        result = cur.execute("""
+            SELECT `PKM_NAME`, `ENCOUNTER`, `DONE` FROM counter WHERE `PKM_NAME` IN ( %s );
+        """  % ', '.join(map(lambda x: "'" + x + "'", names)))
+    
+    data = []
+    data.append(['Pokemon', 'Encounter', 'Done'])
+    for row in result:
+        pkm_name = row[0]
+        encounter = row[1]
+
+        done = u'\u2714'
+        not_done = u'\u274C'
+
+        if row[2] == 0:
+            data.append([pkm_name, encounter, not_done])
+        else:
+            data.append([pkm_name, encounter, done])
+        
+    
+    table = AsciiTable(data)
+    click.echo(table.table)
+
+    conn.commit()
+    conn.close()
 
 def mark_done(name, path):
     """Mark Done in progress database
@@ -49,12 +94,10 @@ def add_counter(name, increase_by, path):
             cur.execute("""
                 UPDATE `counter` SET `ENCOUNTER`= `ENCOUNTER` + %i  WHERE `PKM_NAME`= ?;
             """ % increase_by, (name, ))
-            click.echo("New encounter for %s with %i time" % (name, increase_by))
         else:
             cur.execute("""
                 UPDATE `counter` SET `ENCOUNTER`= `ENCOUNTER` + %i  WHERE `PKM_NAME`= ?;
             """ % increase_by, (name, ))
-            click.echo("Encounter %s for %i time" % (name, increase_by))
         break
     conn.commit()
     conn.close()
@@ -108,7 +151,7 @@ def initalize_database(path):
 
 @click.group()
 def cli():
-    """Main Function
+    """Shiny Counter CLI
     """
     pass
 
@@ -116,10 +159,6 @@ def cli():
 @click.argument('names')
 def hunt(names):
     """Start a hunt.
-
-    Args:
-        names (str): Name(s) of the pokemon. Space as separtor.
-
     """
     pkm_name = names.split()
     path = os.path.join(os.getcwd(), 'hunt.sqlite')
@@ -133,25 +172,18 @@ def hunt(names):
 @click.argument('names')
 def count(add, names):
     """Add encounter to hunting target.
-
-    Args:
-        names (str): Name(s) of the pokemon. Space as separtor.
-
     """
     pkm_name = names.split()
     path = os.path.join(os.getcwd(), 'hunt.sqlite')
     initalize_database(path)
     for pkm in pkm_name:
         add_counter(pkm, add, path)
+    list_info(pkm_name, path)
 
 @click.command()
 @click.argument('names')
 def get(names):
     """Complete a hunt.
-
-    Args:
-        names (str): Name(s) of the pokemon. Space as separtor.
-
     """
     pkm_name = names.split()
     path = os.path.join(os.getcwd(), 'hunt.sqlite')
@@ -159,6 +191,17 @@ def get(names):
     for pkm in pkm_name:
         mark_done(pkm, path)
 
+@click.command(name="list")
+@click.option('--names', '-n', default="", help="Names of the pokemons")
+def list_info_cli(names):
+    """List shiny encounter.
+    """
+    pkm_name = names.split()
+    path = os.path.join(os.getcwd(), 'hunt.sqlite')
+    initalize_database(path)
+    list_info(pkm_name, path)
+
 cli.add_command(hunt)
 cli.add_command(count)
 cli.add_command(get)
+cli.add_command(list_info_cli)
