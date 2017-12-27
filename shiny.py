@@ -3,6 +3,7 @@
 
 import os
 import sqlite3
+import datetime
 
 import click
 from terminaltables import AsciiTable
@@ -91,8 +92,8 @@ def mark_done(name, path):
             click.echo("%s not exist" % name)
         else:
             cur.execute("""
-                UPDATE `counter` SET `DONE`= 1  WHERE `PKM_NAME`= ?;
-            """, (name, ))
+                UPDATE `counter` SET `DONE`= ?  WHERE `PKM_NAME`= ?;
+            """, (datetime.datetime.now().strftime("%I:%M %p on %B %d, %Y"), name, ))
             click.echo("Complete hunt for %s" % name)
         break
     conn.commit()
@@ -165,7 +166,7 @@ def initalize_database(path):
         `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
         `PKM_NAME`	TEXT NOT NULL,
         `ENCOUNTER`	INTEGER DEFAULT 0,
-        `DONE`	INTEGER DEFAULT 0
+        `DONE`	TEXT DEFAULT 0
     );
     """)
     conn.commit()
