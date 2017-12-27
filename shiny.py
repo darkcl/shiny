@@ -7,6 +7,30 @@ import sqlite3
 import click
 from terminaltables import AsciiTable
 
+# Text file related
+def export_text_progress(name, path, text_path):
+    """Export progress from progress database to text file
+
+    Args:
+        name (str): Name of the pokemon
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+
+    result = cur.execute("""
+        SELECT `ENCOUNTER` FROM counter WHERE `PKM_NAME` = ?;
+    """, (name, ))
+
+    for row in result:
+        with open(text_path, "w") as text_file:
+            text_file.write("{}".format(row[0]))
+        break
+
+
+    conn.commit()
+    conn.close()
+
 # Database related
 
 def list_info(names, path):
@@ -178,6 +202,8 @@ def count(add, names):
     initalize_database(path)
     for pkm in pkm_name:
         add_counter(pkm, add, path)
+        text_path = os.path.join(os.getcwd(), "{}.txt".format(pkm))
+        export_text_progress(pkm, path, text_path)
     list_info(pkm_name, path)
 
 @click.command()

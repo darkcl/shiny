@@ -31,6 +31,8 @@ shiny hunt "Poipole Pikachu"
 
 shiny count "Xerneas Poipole" --add 1
 
+# Your folder should contain Xerneas.txt, Poipole.txt and hunt.sqlite now
+
 # Complete shiny hunt for Xerneas
 
 shiny get "Xerneas"
