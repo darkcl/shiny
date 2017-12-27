@@ -19,19 +19,20 @@ Usage
 
 cd ~/Document/my-progress
 
-shiny hunt "Xerneas"
-
 # Start Hunting for Xerneas
 
-shiny hunt "Poipole Pikachu"
+shiny hunt "Xerneas"
 
 # You can enter multiple names to hunt
 
-shiny count "Xerneas Poipole" --add 1
+shiny hunt "Poipole Pikachu"
 
 # Add Counter for Xerneas and Poipole for 1, --add 1 is optional
 
-shiny get "Xerneas"
+shiny count "Xerneas Poipole" --add 1
 
 # Complete shiny hunt for Xerneas
+
+shiny get "Xerneas"
+
 ```
