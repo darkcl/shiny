@@ -1,6 +1,16 @@
 Shiny Counter CLI
 ===
 
+Shiny counter in command line, save your progress in sqlite and text file.
+
+Installation
+---
+
+```bash
+git clone git@github.com:darkcl/shiny.git
+pip install .
+```
+
 Usage
 ---
 
