@@ -3,6 +3,8 @@ Shiny Counter CLI
 
 Shiny counter in command line, save your progress in sqlite and text file.
 
+[![asciicast](https://asciinema.org/a/ti3aumOfdGk1MgfcfOlZoPsg1.png)](https://asciinema.org/a/ti3aumOfdGk1MgfcfOlZoPsg1)
+
 Installation
 ---
 
