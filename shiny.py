@@ -3,9 +3,34 @@
 
 import os
 import sqlite3
+import datetime
 
 import click
 from terminaltables import AsciiTable
+
+# Text file related
+def export_text_progress(name, path, text_path):
+    """Export progress from progress database to text file
+
+    Args:
+        name (str): Name of the pokemon
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+
+    result = cur.execute("""
+        SELECT `ENCOUNTER` FROM counter WHERE `PKM_NAME` = ?;
+    """, (name, ))
+
+    for row in result:
+        with open(text_path, "w") as text_file:
+            text_file.write("{}".format(row[0]))
+        break
+
+
+    conn.commit()
+    conn.close()
 
 # Database related
 
@@ -34,10 +59,11 @@ def list_info(names, path):
         pkm_name = row[0]
         encounter = row[1]
 
-        done = u'\u2714'
-        not_done = u'\u274C'
+        # done = u'\u2714'
+        done = row[2]
+        not_done = 'In Progress'
 
-        if row[2] == 0:
+        if row[2] == '0':
             data.append([pkm_name, encounter, not_done])
         else:
             data.append([pkm_name, encounter, done])
@@ -67,8 +93,8 @@ def mark_done(name, path):
             click.echo("%s not exist" % name)
         else:
             cur.execute("""
-                UPDATE `counter` SET `DONE`= 1  WHERE `PKM_NAME`= ?;
-            """, (name, ))
+                UPDATE `counter` SET `DONE`= ?  WHERE `PKM_NAME`= ?;
+            """, (datetime.datetime.now().strftime("%I:%M %p on %B %d, %Y"), name, ))
             click.echo("Complete hunt for %s" % name)
         break
     conn.commit()
@@ -141,7 +167,7 @@ def initalize_database(path):
         `ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
         `PKM_NAME`	TEXT NOT NULL,
         `ENCOUNTER`	INTEGER DEFAULT 0,
-        `DONE`	INTEGER DEFAULT 0
+        `DONE`	TEXT DEFAULT 0
     );
     """)
     conn.commit()
@@ -178,6 +204,8 @@ def count(add, names):
     initalize_database(path)
     for pkm in pkm_name:
         add_counter(pkm, add, path)
+        text_path = os.path.join(os.getcwd(), "{}.txt".format(pkm))
+        export_text_progress(pkm, path, text_path)
     list_info(pkm_name, path)
 
 @click.command()

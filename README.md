@@ -1,21 +1,40 @@
 Shiny Counter CLI
 ===
 
+Shiny counter in command line, save your progress in sqlite and text file.
+
+Installation
+---
+
+```sh
+git clone git@github.com:darkcl/shiny.git
+sudo pip install .
+```
+
 Usage
 ---
 
-```shiny hunt "Xerneas"```
+```sh
+# Go to a empty folder to save your progress
 
-Start Hunting for Xerneas
+cd ~/Document/my-progress
 
-```shiny hunt "Poipole Pikachu"```
+# Start Hunting for Xerneas
 
-Start Hunting for Poipole, Pikachu
+shiny hunt "Xerneas"
 
-```shiny count "Xerneas Poipole" --add 1```
+# You can enter multiple names to hunt
 
-Add Counter for Xerneas and Poipole for 1
+shiny hunt "Poipole Pikachu"
 
-```shiny get "Xerneas"```
+# Add Counter for Xerneas and Poipole for 1, --add 1 is optional
 
-Complete shiny hunt for Xerneas
+shiny count "Xerneas Poipole" --add 1
+
+# Your folder should contain Xerneas.txt, Poipole.txt and hunt.sqlite now
+
+# Complete shiny hunt for Xerneas
+
+shiny get "Xerneas"
+
+```
