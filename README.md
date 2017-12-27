@@ -38,3 +38,25 @@ shiny count "Xerneas Poipole" --add 1
 shiny get "Xerneas"
 
 ```
+
+Using with OBS
+---
+
+1. Insert a text layer
+![Alt text](assset/obs-1.png?raw=true "Title")
+
+
+
+2. Check 'Read from file'
+![Alt text](assset/obs-2.png?raw=true "Title")
+
+
+
+3. Select your shiny hunt target
+![Alt text](assset/obs-3.png?raw=true "Title")
+
+
+
+4. Position on your streaming setting
+![Alt text](assset/obs-4.png?raw=true "Title")
+
