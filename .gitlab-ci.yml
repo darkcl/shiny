@@ -1,0 +1,8 @@
+test:
+  script:
+    - pip install .
+    - shiny --help
+
+  tags:
+    - python
+
