@@ -59,10 +59,11 @@ def list_info(names, path):
         pkm_name = row[0]
         encounter = row[1]
 
-        done = u'\u2714'
-        not_done = u'\u274C'
+        # done = u'\u2714'
+        done = row[2]
+        not_done = 'In Progress'
 
-        if row[2] == 0:
+        if row[2] == '0':
             data.append([pkm_name, encounter, not_done])
         else:
             data.append([pkm_name, encounter, done])
