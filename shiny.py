@@ -233,3 +233,5 @@ cli.add_command(hunt)
 cli.add_command(count)
 cli.add_command(get)
 cli.add_command(list_info_cli)
+
+if __name__ == '__main__': cli()
