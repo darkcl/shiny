@@ -1,6 +1,6 @@
 
 from flask import Flask
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 
 from core import *
 
