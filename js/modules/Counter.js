@@ -1,5 +1,3 @@
-import { Router, Route, Switch } from 'react-router'
-
 import React from 'react';
 
 var origin = window.location.origin;
