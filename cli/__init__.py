@@ -65,13 +65,14 @@ def list_info_cli(names):
     list_info(pkm_name, path)
 
 @click.command(name="serve")
-def create_web_server():
+@click.option('--port', '-p', default=5000, help="Port you want to be accessing the server")
+def create_web_server(port):
     """Start Web Server.
     """
     app = start_web(os.path.join(os.getcwd(), 'hunt.sqlite'))
     app.config['TEMPLATES_AUTO_RELOAD']=True
 
-    app.run(debug=True,use_reloader=True)
+    app.run(debug=True,use_reloader=True,port=port)
 
 cli.add_command(hunt)
 cli.add_command(count)
