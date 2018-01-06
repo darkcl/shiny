@@ -62,3 +62,76 @@ Using with OBS
 4. Position on your streaming setting
 ![Alt text](assset/obs-4.png?raw=true "Title")
 
+Server
+===
+
+shiny include web server function
+
+start shiny web server with ```shiny serve``` in your progress directory
+
+Restful API
+===
+
+GET /pokemon
+---
+List all shiny progress
+
+POST /pokemon Create a tracker 
+---
+
+Payload:
+
+```json
+{"name": "Pikachu"}
+```
+
+Return:
+
+```json
+{"id": "1"}
+```
+
+GET /pokemon/{id} Get Current Progress from id
+---
+
+Return:
+
+```json
+{
+    "id": "1",
+    "name": "Pikachu",
+    "count": "100",
+    "is_finish": true,
+    "finish_date": "2018-01-01"
+}
+```
+
+GET /pokemon/{id}/add Add one to counter
+---
+
+Return:
+
+```json
+{
+    "id": "1",
+    "name": "Pikachu",
+    "count": "101",
+    "is_finish": true,
+    "finish_date": "2018-01-01"
+}
+```
+
+GET /pokemon/{id}/completed Add one to counter
+---
+
+Return:
+
+```json
+{
+    "id": "1",
+    "name": "Pikachu",
+    "count": "101",
+    "is_finish": true,
+    "finish_date": "2018-01-01"
+}
+```

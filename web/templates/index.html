@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/flipclock.css') }}">
+	</head>
+	<body>
+		<div class="counter"></div>
+		<button class="add-button" onclick="increase();">Add 1</button>
+		<script src="{{ url_for('static',filename='js/libs/jquery.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/flipclock/flipclock.min.js') }}"></script>
+        <script>
+            var clock = $('.counter').FlipClock(0, {
+                clockFace: 'Counter'
+            });
+
+            function makeRequest (method, url, done) {
+                var xhr = new XMLHttpRequest();
+                xhr.open(method, url);
+                xhr.onload = function () {
+                    done(null, xhr.response);
+                };
+                xhr.onerror = function () {
+                    done(xhr.response);
+                };
+                xhr.send();
+            }
+
+            function increase() {
+                makeRequest('GET', "{{ url_for('show_pokemon', pokemon_id=1) }}", function (err, datums) {
+                    if (err) { throw err; }
+                    console.log(datums);
+                });
+                clock.increment();
+            }
+        </script>
+	</body>
+</html>
