@@ -1,6 +1,7 @@
 test:
   script:
-    - pip install .
+    - python setup.py sdist
+    - pip install ./dist/shiny-0.2.tar.gz
     - shiny --help
   tags:
     - python
