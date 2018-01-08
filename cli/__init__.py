@@ -72,7 +72,7 @@ def create_web_server(port):
     app = start_web(os.path.join(os.getcwd(), 'hunt.sqlite'))
     app.config['TEMPLATES_AUTO_RELOAD']=True
 
-    app.run(debug=True,use_reloader=True,port=port)
+    app.run(host='0.0.0.0', debug=True, use_reloader=True,port=port)
 
 cli.add_command(hunt)
 cli.add_command(count)
