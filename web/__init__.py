@@ -43,6 +43,8 @@ def start_web(path):
     def encounter_pokemon(pokemon_id):
         add_counter_id(str(pokemon_id), path)
         d = list_info_model(path, str(pokemon_id))
+        text_path = os.path.join(os.getcwd(), "{}.txt".format(d["name"]))
+        export_text_progress(d["name"], path, text_path)
         return jsonify(d)
 
     @app.route("/api/pokemon/<pokemon_id>/completed")
