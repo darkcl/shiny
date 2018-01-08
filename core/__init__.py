@@ -30,6 +30,77 @@ def export_text_progress(name, path, text_path):
     conn.close()
 
 # Database related
+class Pokemon(object):
+    """Shiny tracking model class:
+
+    Attributes:
+        id: Index for the pokemon
+        name: A string representing the pokemon's name.
+        encounter: A integer tracking the current encounter.
+        is_finished: A boolean representing the hunt is finished or not.
+        finished_date: A string representing the date of hunt is finished. (optional)
+    """
+    def __init__(self, index, name, encounter, is_finished, finished_date):
+        """Return a Pokemon tracker object.
+        """
+        self.index = index
+        self.name = name
+        self.encounter = encounter
+        self.is_finished = is_finished
+        self.finished_date = finished_date
+    
+    def dict_representation(self):
+        """Return a Pokemon tracker dictionary.
+        """
+        result = {
+            "id": self.index,
+            "name": self.name,
+            "count": self.encounter,
+            "is_finished": self.is_finished
+        }
+
+        if len(self.finished_date) != 0:
+            result["finished_date"] = self.finished_date
+        return result
+
+
+def list_info_model(path, identity=''):
+    """List information as model in progress database
+
+    Args:
+        identity : Index of the pokemons
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+
+    if len(identity) == 0:
+        result = cur.execute("""
+            SELECT `ID`, `PKM_NAME`, `ENCOUNTER`, `DONE` FROM counter;
+        """)
+    else:
+        result = cur.execute("""
+            SELECT `ID`, `PKM_NAME`, `ENCOUNTER`, `DONE` FROM counter WHERE `ID` = ?;
+        """, (identity,))
+    
+    data = []
+    for row in result:
+        index = row[0]
+        pkm_name = row[1]
+        encounter = row[2]
+        done = row[3]
+
+        if done == '0':
+            progress = Pokemon(index, pkm_name, encounter, False, '')
+            data.append(progress.dict_representation())
+        else:
+            progress = Pokemon(index, pkm_name, encounter, True, done)
+            data.append(progress.dict_representation())
+
+    conn.commit()
+    conn.close()
+    result = data if len(identity) == 0 else data[0]
+    return result
 
 def list_info(names, path):
     """List information in progress database
@@ -97,6 +168,39 @@ def mark_done(name, path):
     conn.commit()
     conn.close()
 
+def mark_done_id(index, path):
+    """Mark Done in progress database
+
+    Args:
+        index (str): ID of the pokemon
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+    cur.execute("""
+                UPDATE `counter` SET `DONE`= ?  WHERE `ID`= ?;
+            """, (datetime.datetime.now().strftime("%I:%M %p on %B %d, %Y"), index, ))
+    conn.commit()
+    conn.close()
+
+def add_counter_id(index, path, increase_by=1):
+    """Add counter in progress database
+
+    Args:
+        index (str): ID of the pokemon
+        increase_by (int): Adding count
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE `counter` SET `ENCOUNTER`= `ENCOUNTER` + %i  WHERE `ID`= ?;
+    """ % increase_by, (index, ))
+    
+    conn.commit()
+    conn.close()
+
 def add_counter(name, increase_by, path):
     """Add counter in progress database
 
@@ -131,6 +235,8 @@ def create_hunt(name, path):
     Args:
         name (str): Name of the pokemon
         path (str): Path of progress database
+    Return:
+        bool: Result of operation
     """
 
     # Check If Record Exist
@@ -144,11 +250,17 @@ def create_hunt(name, path):
         if row[0] == 0:
             cur.execute("INSERT INTO `counter`(`ID`,`PKM_NAME`) VALUES (NULL, ?);", (name, ))
             click.echo("Start hunting for %s" % name)
+
+            conn.commit()
+            conn.close()
+            return True
         else:
             click.echo("%s already exist" % name)
+            
+            conn.commit()
+            conn.close()
+            return False
         break
-    conn.commit()
-    conn.close()
 
 
 def initalize_database(path):

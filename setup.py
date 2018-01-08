@@ -1,15 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="shiny",
-    version='0.1',
-    py_modules=['shiny'],
+    version='0.2',
+    packages=find_packages(),
     include_package_data=True,
-    packages=['cli'],
+    zip_safe=False,
     install_requires=[
         'Click',
         'terminaltables',
-        'Flask'
+        'flask'
     ],
     entry_points='''
         [console_scripts]
