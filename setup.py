@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name="shiny",
     version='0.2',
-    py_modules=['shiny'],
+    py_modules=['cli', 'core', 'web'],
     install_requires=[
         'Click',
         'terminaltables',
