@@ -94,7 +94,7 @@ Return:
         "name": "Pikachu",
         "count": "100",
         "is_finish": true,
-        "finish_date": "2018-01-01"
+        "finished_date": "2018-01-01"
     }
 ]
 ```
@@ -129,7 +129,7 @@ Return:
     "name": "Pikachu",
     "count": "100",
     "is_finish": true,
-    "finish_date": "2018-01-01"
+    "finished_date": "2018-01-01"
 }
 ```
 
