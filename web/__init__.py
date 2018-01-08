@@ -17,7 +17,8 @@ def start_web(path):
 
     @app.route("/counter/<pokemon_id>")
     def counter_home(pokemon_id):
-        return render_template('counter.html', id=pokemon_id)
+        d = list_info_model(path, str(pokemon_id))
+        return render_template('counter.html', id=pokemon_id, entry=d)
     
     @app.route("/api/pokemon", methods=['GET', 'POST'])
     def list_pokemon():
