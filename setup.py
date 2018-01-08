@@ -6,7 +6,8 @@ setup(
     py_modules=['shiny'],
     install_requires=[
         'Click',
-        'terminaltables'
+        'terminaltables',
+        'flask'
     ],
     entry_points='''
         [console_scripts]
