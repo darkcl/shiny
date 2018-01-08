@@ -1,34 +1,85 @@
 <!DOCTYPE html>
-<title>Shiny Counter</title>
-<div class=page>
-    <h1>Your shiny hunting progress
-        <button class="create-hunt" onclick="createHunt();">Create Hunt</button>
-    </h1>
-    <ul class=entries>
-        {% for entry in entries %} {% if not entry.is_finished %}
-        <li>
-            <a href="{{ url_for('counter_home', pokemon_id=entry.id) }}">{{ entry.name }} - {{ entry.count }}</a>
-            {% endif %} {% endfor %}
-    </ul>
-    <h1>Completed Hunt</h1>
-    <ul class=entries>
-        {% for entry in entries %} {% if entry.is_finished %}
-        <li>{{ entry.name }} - {{ entry.count }} {% endif %} {% endfor %}
-    </ul>
-</div>
-<script>
-    function createHunt() {
-        var pkmName = prompt("Please enter pokemon name", "");
-        if (name != null) {
-            fetch("{{ url_for('list_pokemon') }}", {
-                method: 'post',
-                headers: {
-                  'Accept': 'application/json, text/plain, */*',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({name: pkmName})
-              })
-                .then(res => window.location.reload());
-        }
-    };
-</script>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shiny Counter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+
+
+</head>
+
+<body>
+
+
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+
+            <div class="container">
+
+                <div class="inner cover">
+                    <h1 class="cover-heading">Your Progress</h1>
+                    <p class="lead">
+                        <a href="#" class="btn btn-lg btn-default" onclick="createHunt();">Create Hunt</a>
+                    </p>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Hunting</h2>
+                                <div class="list-group">
+                                    {% for entry in entries %} {% if not entry.is_finished %}
+                                        <a href="{{ url_for('counter_home', pokemon_id=entry.id) }}" class="list-group-item list-group-item-action row-text">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1"> {{ entry.name }}</h5>
+                                            </div>
+                                            <p class="mb-1">Encounter for {{ entry.count }} times</p>
+                                        </a>
+                                        {% endif %} {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <h2>Completed Hunt</h2>
+                                <ul class="list-group">
+                                    {% for entry in entries %} {% if entry.is_finished %}
+                                    <li class="list-group-item row-text">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1"> {{ entry.name }}</h5>
+                                        </div>
+                                        <p class="mb-1">Encounter for {{ entry.count }} times at {{ entry.finished_date }}</p>
+                                    </li>
+                                    {% endif %} {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        function createHunt() {
+            var pkmName = prompt("Please enter pokemon name", "");
+            if (name != null) {
+                fetch("{{ url_for('list_pokemon') }}", {
+                    method: 'post',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: pkmName })
+                })
+                    .then(res => window.location.reload());
+            }
+        };
+    </script>
+</body>
+
+</html>
