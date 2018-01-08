@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/flipclock.css') }}">
+	</head>
+	<body>
+		<div class="counter"></div>
+        <button class="add-button" onclick="increase();">Add 1</button>
+        <button class="complete-button" onclick="complete();">Complete</button>
+
+        <button class="back-button" onclick="backHome();">Home</button>
+		<script src="{{ url_for('static',filename='js/libs/jquery.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/flipclock/flipclock.min.js') }}"></script>
+        <script>
+            var clock = $('.counter').FlipClock(0, {
+                clockFace: 'Counter'
+            });
+
+            $(function() {
+                console.log( "ready!" );
+                fetch("{{ url_for('show_pokemon', pokemon_id=id) }}")
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonResponse) {
+                    // do something with jsonResponse
+                    console.log(jsonResponse);
+                    clock.setCounter(jsonResponse.count);
+                });
+                $('body').on('keyup', function (e) {
+                    if(e.keyCode == 32) {
+                        increase();
+                    }
+                });
+            });
+            
+
+            function increase() {
+                var world = this;
+                fetch("{{ url_for('encounter_pokemon', pokemon_id=id) }}")
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonResponse) {
+                    // do something with jsonResponse
+                    console.log(jsonResponse);
+                    clock.setCounter(jsonResponse.count);
+                });
+            }
+
+            function complete() {
+                fetch("{{ url_for('complete_hunt', pokemon_id=id) }}")
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(jsonResponse) {
+                    // do something with jsonResponse
+                    console.log(jsonResponse);
+                    window.location.replace("{{ url_for('home') }}");
+                });
+            }
+
+            function backHome() {
+                window.location.replace("{{ url_for('home') }}");
+            }
+        </script>
+	</body>
+</html>

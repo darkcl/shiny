@@ -1,36 +1,34 @@
-<html>
-	<head>
-		<link rel="stylesheet" href="{{ url_for('static',filename='css/flipclock.css') }}">
-	</head>
-	<body>
-		<div class="counter"></div>
-		<button class="add-button" onclick="increase();">Add 1</button>
-		<script src="{{ url_for('static',filename='js/libs/jquery.js') }}"></script>
-        <script src="{{ url_for('static',filename='js/flipclock/flipclock.min.js') }}"></script>
-        <script>
-            var clock = $('.counter').FlipClock(0, {
-                clockFace: 'Counter'
-            });
-
-            function makeRequest (method, url, done) {
-                var xhr = new XMLHttpRequest();
-                xhr.open(method, url);
-                xhr.onload = function () {
-                    done(null, xhr.response);
-                };
-                xhr.onerror = function () {
-                    done(xhr.response);
-                };
-                xhr.send();
-            }
-
-            function increase() {
-                makeRequest('GET', "{{ url_for('show_pokemon', pokemon_id=1) }}", function (err, datums) {
-                    if (err) { throw err; }
-                    console.log(datums);
-                });
-                clock.increment();
-            }
-        </script>
-	</body>
-</html>
+<!DOCTYPE html>
+<title>Shiny Counter</title>
+<div class=page>
+    <h1>Your shiny hunting progress
+        <button class="create-hunt" onclick="createHunt();">Create Hunt</button>
+    </h1>
+    <ul class=entries>
+        {% for entry in entries %} {% if not entry.is_finished %}
+        <li>
+            <a href="{{ url_for('counter_home', pokemon_id=entry.id) }}">{{ entry.name }} - {{ entry.count }}</a>
+            {% endif %} {% endfor %}
+    </ul>
+    <h1>Completed Hunt</h1>
+    <ul class=entries>
+        {% for entry in entries %} {% if entry.is_finished %}
+        <li>{{ entry.name }} - {{ entry.count }} {% endif %} {% endfor %}
+    </ul>
+</div>
+<script>
+    function createHunt() {
+        var pkmName = prompt("Please enter pokemon name", "");
+        if (name != null) {
+            fetch("{{ url_for('list_pokemon') }}", {
+                method: 'post',
+                headers: {
+                  'Accept': 'application/json, text/plain, */*',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({name: pkmName})
+              })
+                .then(res => window.location.reload());
+        }
+    };
+</script>

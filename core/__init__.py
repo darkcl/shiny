@@ -168,6 +168,21 @@ def mark_done(name, path):
     conn.commit()
     conn.close()
 
+def mark_done_id(index, path):
+    """Mark Done in progress database
+
+    Args:
+        index (str): ID of the pokemon
+        path (str): Path of progress database
+    """
+    conn = sqlite3.connect(path)
+    cur = conn.cursor()
+    cur.execute("""
+                UPDATE `counter` SET `DONE`= ?  WHERE `ID`= ?;
+            """, (datetime.datetime.now().strftime("%I:%M %p on %B %d, %Y"), index, ))
+    conn.commit()
+    conn.close()
+
 def add_counter_id(index, path, increase_by=1):
     """Add counter in progress database
 
@@ -220,6 +235,8 @@ def create_hunt(name, path):
     Args:
         name (str): Name of the pokemon
         path (str): Path of progress database
+    Return:
+        bool: Result of operation
     """
 
     # Check If Record Exist
@@ -233,11 +250,17 @@ def create_hunt(name, path):
         if row[0] == 0:
             cur.execute("INSERT INTO `counter`(`ID`,`PKM_NAME`) VALUES (NULL, ?);", (name, ))
             click.echo("Start hunting for %s" % name)
+
+            conn.commit()
+            conn.close()
+            return True
         else:
             click.echo("%s already exist" % name)
+            
+            conn.commit()
+            conn.close()
+            return False
         break
-    conn.commit()
-    conn.close()
 
 
 def initalize_database(path):
