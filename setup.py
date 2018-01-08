@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="shiny",
-    version='0.1',
+    version='0.2',
     py_modules=['shiny'],
     install_requires=[
         'Click',
