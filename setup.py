@@ -11,6 +11,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        shiny=shiny:cli
+        shiny=cli:cli
     ''',
 )
