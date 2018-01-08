@@ -39,6 +39,10 @@ shiny count "Xerneas Poipole" --add 1
 
 shiny get "Xerneas"
 
+# Open web server on port 8080, defalt 5000
+
+shiny serve --port 8080
+
 ```
 
 Using with OBS
@@ -62,3 +66,103 @@ Using with OBS
 4. Position on your streaming setting
 ![Alt text](assset/obs-4.png?raw=true "Title")
 
+Server
+===
+
+shiny include web server function
+
+start shiny web server with ```shiny serve``` in your progress directory
+
+The web page contains a progress list and a simple counter.
+
+![Alt text](assset/web.jpg?raw=true "Title")
+
+API
+===
+
+GET ```/api/pokemon```
+---
+
+Usage: List all shiny progress
+
+Return:
+
+```json
+[
+    {
+        "id": "1",
+        "name": "Pikachu",
+        "count": "100",
+        "is_finish": true,
+        "finished_date": "2018-01-01"
+    }
+]
+```
+
+POST ```/api/pokemon```
+---
+
+Usage: Create a tracker 
+
+Payload:
+
+```json
+{"name": "Pikachu"}
+```
+
+Return:
+
+```json
+{"id": "1"}
+```
+
+GET ```/api/pokemon/{id}```
+---
+
+Usage: Get Current Progress from id
+
+Return:
+
+```json
+{
+    "id": "1",
+    "name": "Pikachu",
+    "count": "100",
+    "is_finish": true,
+    "finished_date": "2018-01-01"
+}
+```
+
+GET ```/api/pokemon/{id}/add``` 
+---
+
+Usage: Add one to counter
+
+Return:
+
+```json
+{
+    "id": "1",
+    "name": "Pikachu",
+    "count": "101",
+    "is_finish": true,
+    "finished_date": "2018-01-01"
+}
+```
+
+GET ```/api/pokemon/{id}/completed```
+---
+
+Usage: Complete for the hunt
+
+Return:
+
+```json
+{
+    "id": "1",
+    "name": "Pikachu",
+    "count": "101",
+    "is_finish": true,
+    "finished_date": "2018-01-01"
+}
+```
