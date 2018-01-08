@@ -8,9 +8,11 @@ Shiny counter in command line, save your progress in sqlite and text file.
 Installation
 ---
 
+Download release file [here](https://github.com/darkcl/shiny/releases/download/0.2/shiny-0.2.tar.gz)
+
 ```sh
-git clone git@github.com:darkcl/shiny.git
-sudo pip install .
+cd ~/Download
+sudo pip install ./shiny-0.2.tar.gz --upgrade
 ```
 
 Usage
