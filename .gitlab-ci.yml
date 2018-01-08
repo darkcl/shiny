@@ -2,8 +2,6 @@ test:
   script:
     - pip install .
     - shiny --help
-    - shiny serve
-    - exit
   tags:
     - python
 
